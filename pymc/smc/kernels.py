@@ -387,6 +387,7 @@ class IMH(SMC_KERNEL):
             raise ValueError('Sample covariances not valid! Likely "draws" is too small!')
         mean = np.average(self.tempered_posterior, axis=0)
         self.proposal_dist = multivariate_normal(mean, cov)
+        self.cov = cov
 
     def mutate(self):
         """Independent Metropolis-Hastings perturbation."""
@@ -433,6 +434,7 @@ class IMH(SMC_KERNEL):
         stats = super().sample_stats()
         stats.update(
             {
+                "cov" : self.cov,
                 "accept_rate": self.acc_rate,
             }
         )
